@@ -1,19 +1,70 @@
 package com.kruzus;
 
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Scanner;
+
 public class Main {
-    public static void main(String[] args) {
-        // Press Alt+Enter with your caret at the highlighted text to see how
-        // IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+    static Scanner scanner = new Scanner(System.in);
 
-        // Press Shift+F10 or click the green arrow button in the gutter to run the code.
-        for (int i = 1; i <= 5; i++) {
+    public static void main(String[] args) throws InterruptedException {
 
-            // Press Shift+F9 to start debugging your code. We have set one breakpoint
-            // for you, but you can always add more by pressing Ctrl+F8.
-            System.out.println("i = " + i);
+        boolean areWeDone = true;
+        ArrayList<Object> data = new ArrayList<>();
+
+        print(">> TODO LIST 0.0.1");
+        Thread.sleep(2000);
+
+        while (areWeDone) {
+
+            LocalDateTime now = LocalDateTime.now();
+            // logic
+            String stuff = input(">> What we doing? ");
+            print(">> " + stuff);
+
+            // commands so far
+            if (stuff.contains("!q")) {
+                areWeDone = false;
+                print(">> Bye.");
+            }
+
+            // shows data
+            if (stuff.contains("!data")) {
+                if (data.isEmpty()) {
+                    print(">> Data is not set.");
+                } else {
+                    data.forEach(Main::print);
+                }
+            }
+
+
+               // clears data
+               if (stuff.contains("!clear")) {
+                data.clear();
+            }
+
+            // insert data
+            if (stuff.contains("!insert")) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy : hh:mm:ss a");
+                String formattedDateTime = now.format(formatter);
+                String inserts = input(">> What we working on? ");
+                var json = Map.of(inserts, formattedDateTime);
+
+                data.add(json);
+            }
+
         }
     }
+
+    static void print(Object data) {
+        System.out.println(data);
+    }
+
+    static String input(Object data) {
+        System.out.print(data);
+        return scanner.nextLine();
+    }
+
 }
